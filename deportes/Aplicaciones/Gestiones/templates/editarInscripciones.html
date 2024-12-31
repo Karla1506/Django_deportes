@@ -1,0 +1,91 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Editar Inscripción</h3>
+        <form action="/procesarEdicionInscripcion/" id="frm_editar_inscripcion" method="post">
+            {% csrf_token %}
+            
+            <!-- Campo oculto para el ID de la inscripción -->
+            <input type="hidden" name="id_inscripcion" value="{{ inscripcion.id }}">
+            
+            <div class="mb-3">
+                <label for="txt_participante" class="form-label"><b>Participante:</b></label>
+                <input type="text" name="txt_participante" id="txt_participante" class="form-control" value="{{ inscripcion.participante.nombre }} {{ inscripcion.participante.apellido }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_evento" class="form-label"><b>Evento:</b></label>
+                <input type="text" name="txt_evento" id="txt_evento" class="form-control" value="{{ inscripcion.evento.nombre }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_fecha_inscripcion" class="form-label"><b>Fecha de Inscripción:</b></label>
+                <input type="text" name="txt_fecha_inscripcion" id="txt_fecha_inscripcion" class="form-control" value="{{ inscripcion.fecha_inscripcion }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_estado" class="form-label"><b>Estado:</b></label>
+                <select name="txt_estado" id="txt_estado" class="form-control" required>
+                    <option value="Confirmada" {% if inscripcion.estado == "Confirmada" %}selected{% endif %}>Confirmada</option>
+                    <option value="Pendiente" {% if inscripcion.estado == "Pendiente" %}selected{% endif %}>Pendiente</option>
+                    <option value="Cancelada" {% if inscripcion.estado == "Cancelada" %}selected{% endif %}>Cancelada</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_comentarios" class="form-label"><b>Comentarios:</b></label>
+                <textarea name="txt_comentarios" id="txt_comentarios" class="form-control" rows="3">{{ inscripcion.comentarios }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning me-2">Guardar Cambios</button>
+                <a href="/listadoInscripciones/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_editar_inscripcion").validate({
+            rules: {
+                "txt_estado": {
+                    required: true
+                },
+                "txt_comentarios": {
+                    required: false,
+                    minlength: 5,
+                    maxlength: 500
+                }
+            },
+            messages: {
+                "txt_estado": {
+                    required: "El estado de la inscripción es obligatorio."
+                },
+                "txt_comentarios": {
+                    minlength: "Los comentarios deben tener al menos 5 caracteres.",
+                    maxlength: "Los comentarios pueden tener hasta 500 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

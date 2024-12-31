@@ -1,0 +1,113 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Añadimos clases de Bootstrap para centrar y darle borde al formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Agregar Nueva Inscripción</h3>
+        <form action="/guardarInscripcion/" id="frm_nueva_inscripcion" method="post">
+            {% csrf_token %}
+
+            <!-- Campo Participante -->
+            <div class="mb-3">
+                <label for="txt_participante" class="form-label"><b>PARTICIPANTE:</b></label>
+                <select name="participante" id="txt_participante" class="form-control" required>
+                    <!-- Aquí deberías cargar los participantes desde la base de datos -->
+                    <option value="">Seleccione un participante</option>
+                    {% for participante in participantes %}
+                    <option value="{{ participante.id }}">{{ participante.nombre }} {{ participante.apellido }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Campo Evento -->
+            <div class="mb-3">
+                <label for="txt_evento" class="form-label"><b>EVENTO:</b></label>
+                <select name="evento" id="txt_evento" class="form-control" required>
+                    <!-- Aquí deberías cargar los eventos desde la base de datos -->
+                    <option value="">Seleccione un evento</option>
+                    {% for evento in eventos %}
+                    <option value="{{ evento.id }}">{{ evento.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Campo Estado -->
+            <div class="mb-3">
+                <label for="txt_estado" class="form-label"><b>ESTADO:</b></label>
+                <select name="estado" id="txt_estado" class="form-control" required>
+                    <option value="Confirmada">Confirmada</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Cancelada">Cancelada</option>
+                </select>
+            </div>
+
+            <!-- Campo Comentarios -->
+            <div class="mb-3">
+                <label for="txt_comentarios" class="form-label"><b>COMENTARIOS:</b></label>
+                <textarea name="comentarios" id="txt_comentarios" class="form-control" rows="3"></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary me-2">Guardar</button>
+                <a href="/listadoInscripciones/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_nueva_inscripcion").validate({
+            rules: {
+                "participante": {
+                    required: true
+                },
+                "evento": {
+                    required: true
+                },
+                "estado": {
+                    required: true
+                },
+                "comentarios": {
+                    required: false,
+                    minlength: 10,
+                    maxlength: 300
+                }
+            },
+            messages: {
+                "participante": {
+                    required: "Debe seleccionar un participante."
+                },
+                "evento": {
+                    required: "Debe seleccionar un evento."
+                },
+                "estado": {
+                    required: "Debe seleccionar el estado."
+                },
+                "comentarios": {
+                    minlength: "Los comentarios deben tener al menos 10 caracteres.",
+                    maxlength: "Los comentarios pueden tener hasta 300 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;          
+        font-size: 14px;      
+        font-weight: bold;    
+        margin-top: 5px;     
+    }
+
+    input.error, 
+    textarea.error, 
+    select.error {
+        border: 2px solid red; 
+    }
+</style>
+
+{% endblock %}

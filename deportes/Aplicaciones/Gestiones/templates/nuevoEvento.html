@@ -1,0 +1,144 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Añadimos clases de Bootstrap para centrar y darle borde al formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Agregar Nuevo Evento</h3>
+        <form action="/guardarEvento/" id="frm_nuevo_evento" method="post">
+            {% csrf_token %}
+
+            <!-- Campo Nombre -->
+            <div class="mb-3">
+                <label for="txt_nombre" class="form-label"><b>NOMBRE DEL EVENTO:</b></label>
+                <input type="text" name="nombre" id="txt_nombre" class="form-control" required>
+            </div>
+
+            <!-- Campo Descripción -->
+            <div class="mb-3">
+                <label for="txt_descripcion" class="form-label"><b>DESCRIPCIÓN DEL EVENTO:</b></label>
+                <textarea name="descripcion" id="txt_descripcion" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <!-- Campo Fecha de Inicio -->
+            <div class="mb-3">
+                <label for="txt_fecha_inicio" class="form-label"><b>FECHA DE INICIO:</b></label>
+                <input type="date" name="fecha_inicio" id="txt_fecha_inicio" class="form-control" required>
+            </div>
+
+            <!-- Campo Fecha de Fin -->
+            <div class="mb-3">
+                <label for="txt_fecha_fin" class="form-label"><b>FECHA DE FIN:</b></label>
+                <input type="date" name="fecha_fin" id="txt_fecha_fin" class="form-control" required>
+            </div>
+
+            <!-- Campo Ubicación -->
+            <div class="mb-3">
+                <label for="txt_ubicacion" class="form-label"><b>UBICACIÓN:</b></label>
+                <input type="text" name="ubicacion" id="txt_ubicacion" class="form-control" required>
+            </div>
+
+            <!-- Campo Organizador -->
+            <div class="mb-3">
+                <label for="txt_organizador" class="form-label"><b>ORGANIZADOR:</b></label>
+                <input type="text" name="organizador" id="txt_organizador" class="form-control" required>
+            </div>
+
+            <!-- Campo Cupo Máximo -->
+            <div class="mb-3">
+                <label for="txt_cupo_maximo" class="form-label"><b>CUPO MÁXIMO:</b></label>
+                <input type="number" name="cupo_maximo" id="txt_cupo_maximo" class="form-control" required>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary me-2">Guardar</button>
+                <a href="/listadoEventos/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_nuevo_evento").validate({
+            rules: {
+                "nombre": {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 200
+                },
+                "descripcion": {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 500
+                },
+                "fecha_inicio": {
+                    required: true
+                },
+                "fecha_fin": {
+                    required: true
+                },
+                "ubicacion": {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 200
+                },
+                "organizador": {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 100
+                },
+                "cupo_maximo": {
+                    required: true,
+                    min: 1
+                }
+            },
+            messages: {
+                "nombre": {
+                    required: "El nombre del evento es obligatorio.",
+                    minlength: "El nombre debe tener al menos 2 caracteres."
+                },
+                "descripcion": {
+                    required: "La descripción del evento es obligatoria.",
+                    minlength: "La descripción debe tener al menos 10 caracteres."
+                },
+                "fecha_inicio": {
+                    required: "La fecha de inicio es obligatoria."
+                },
+                "fecha_fin": {
+                    required: "La fecha de fin es obligatoria."
+                },
+                "ubicacion": {
+                    required: "La ubicación es obligatoria.",
+                    minlength: "La ubicación debe tener al menos 5 caracteres."
+                },
+                "organizador": {
+                    required: "El organizador es obligatorio.",
+                    minlength: "El organizador debe tener al menos 2 caracteres."
+                },
+                "cupo_maximo": {
+                    required: "El cupo máximo es obligatorio.",
+                    min: "El cupo máximo debe ser al menos 1."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

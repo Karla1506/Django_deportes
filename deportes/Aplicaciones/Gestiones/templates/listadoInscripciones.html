@@ -1,0 +1,71 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-2">
+    <div class="card-body text-end">
+        <a href="/nuevaInscripcion/" class="btn btn-outline-success mb-1">Agregar Inscripción</a>
+    </div>
+    
+    <!-- Contenedor con borde y sombra para la tabla -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Lista de Inscripciones</h3>
+        
+        <!-- Campo de búsqueda -->
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar por nombre de participante..." onkeyup="filterTable()">
+        </div>
+        
+        <table class="table table-bordered table-striped table-hover" id="inscripcionesTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>PARTICIPANTE</th>
+                    <th>EVENTO</th>
+                    <th>FECHA DE INSCRIPCIÓN</th>
+                    <th>ESTADO</th>
+                    <th>COMENTARIOS</th>
+                    <th>ACCIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inscripcion in inscripciones %}
+                    <tr>
+                        <td>{{ inscripcion.id }}</td>
+                        <td>{{ inscripcion.participante.nombre }} {{ inscripcion.participante.apellido }}</td>
+                        <td>{{ inscripcion.evento.nombre }}</td>
+                        <td>{{ inscripcion.fecha_inscripcion }}</td>
+                        <td>{{ inscripcion.estado }}</td>
+                        <td>{{ inscripcion.comentarios }}</td>
+                        <td>
+                            <a href="/editarInscripcion/{{ inscripcion.id }}" class="btn btn-warning btn-sm me-2">Editar</a>  
+                            <a href="/eliminarInscripcion/{{ inscripcion.id }}" class="btn btn-danger btn-sm">Eliminar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function filterTable() {
+        // Obtener el valor del input de búsqueda
+        const searchValue = document.getElementById('searchInput').value.toLowerCase();
+        const table = document.getElementById('inscripcionesTable');
+        const rows = table.getElementsByTagName('tr');
+        
+        // Iterar sobre las filas y filtrar por el contenido de la columna "PARTICIPANTE"
+        for (let i = 1; i < rows.length; i++) {
+            const nameCell = rows[i].getElementsByTagName('td')[1]; // Índice 1 corresponde a la columna "PARTICIPANTE"
+            if (nameCell) {
+                const name = nameCell.textContent.toLowerCase();
+                if (name.includes(searchValue)) {
+                    rows[i].style.display = ''; // Mostrar fila
+                } else {
+                    rows[i].style.display = 'none'; // Ocultar fila
+                }
+            }
+        }
+    }
+</script>
+{% endblock %}

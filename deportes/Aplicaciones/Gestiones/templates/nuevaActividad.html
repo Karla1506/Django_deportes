@@ -1,0 +1,138 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Añadimos clases de Bootstrap para centrar y darle borde al formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Agregar Nueva Actividad</h3>
+        <form action="/guardarActividad/" id="frm_nueva_actividad" method="post">
+            {% csrf_token %}
+
+            <!-- Campo Nombre -->
+            <div class="mb-3">
+                <label for="txt_nombre" class="form-label"><b>NOMBRE DE LA ACTIVIDAD:</b></label>
+                <input type="text" name="nombre" id="txt_nombre" class="form-control" required>
+            </div>
+
+            <!-- Campo Descripción -->
+            <div class="mb-3">
+                <label for="txt_descripcion" class="form-label"><b>DESCRIPCIÓN DE LA ACTIVIDAD:</b></label>
+                <textarea name="descripcion" id="txt_descripcion" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <!-- Campo Duración -->
+            <div class="mb-3">
+                <label for="txt_duracion" class="form-label"><b>DURACIÓN:</b></label>
+                <input type="text" name="duracion" id="txt_duracion" class="form-control" required placeholder="Ejemplo: 2:00:00 (2 horas)">
+            </div>
+
+            <!-- Campo Evento (Selección de Evento) -->
+            <div class="mb-3">
+                <label for="txt_evento" class="form-label"><b>EVENTO:</b></label>
+                <select name="evento" id="txt_evento" class="form-control" required>
+                    <option value="">Seleccione un evento</option>
+                    {% for evento in eventos %}
+                        <option value="{{ evento.id }}">{{ evento.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Campo Nivel de Dificultad -->
+            <div class="mb-3">
+                <label for="txt_nivel_dificultad" class="form-label"><b>NIVEL DE DIFICULTAD:</b></label>
+                <select name="nivel_dificultad" id="txt_nivel_dificultad" class="form-control" required>
+                    <option value="Facil">Fácil</option>
+                    <option value="Intermedio">Intermedio</option>
+                    <option value="Avanzado">Avanzado</option>
+                </select>
+            </div>
+
+            <!-- Campo Equipo Necesario -->
+            <div class="mb-3">
+                <label for="txt_equipo_necesario" class="form-label"><b>EQUIPO NECESARIO:</b></label>
+                <textarea name="equipo_necesario" id="txt_equipo_necesario" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary me-2">Guardar</button>
+                <a href="/listadoActividades/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_nueva_actividad").validate({
+            rules: {
+                "nombre": {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 200
+                },
+                "descripcion": {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 500
+                },
+                "duracion": {
+                    required: true,
+                    pattern: /^([0-9]{1,2}):([0-9]{2}):([0-9]{2})$/
+                },
+                "evento": {
+                    required: true
+                },
+                "nivel_dificultad": {
+                    required: true
+                },
+                "equipo_necesario": {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 500
+                }
+            },
+            messages: {
+                "nombre": {
+                    required: "El nombre de la actividad es obligatorio.",
+                    minlength: "El nombre debe tener al menos 2 caracteres."
+                },
+                "descripcion": {
+                    required: "La descripción de la actividad es obligatoria.",
+                    minlength: "La descripción debe tener al menos 10 caracteres."
+                },
+                "duracion": {
+                    required: "La duración es obligatoria.",
+                    pattern: "Formato de duración inválido. Ejemplo: 2:00:00 (2 horas)."
+                },
+                "evento": {
+                    required: "Debe seleccionar un evento."
+                },
+                "nivel_dificultad": {
+                    required: "Debe seleccionar el nivel de dificultad."
+                },
+                "equipo_necesario": {
+                    required: "El equipo necesario es obligatorio.",
+                    minlength: "El equipo necesario debe tener al menos 5 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

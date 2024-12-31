@@ -1,0 +1,106 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Editar Registro de Actividad</h3>
+        <form action="/procesarEdicionRegistroActividad/" id="frm_editar_registro" method="post">
+            {% csrf_token %}
+            
+            <!-- Campo oculto para el ID del registro -->
+            <input type="hidden" name="id_registro" value="{{ registro.id }}">
+            
+            <div class="mb-3">
+                <label for="txt_participante" class="form-label"><b>Participante:</b></label>
+                <input type="text" name="txt_participante" id="txt_participante" class="form-control" value="{{ registro.participante.nombre }} {{ registro.participante.apellido }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_actividad" class="form-label"><b>Actividad:</b></label>
+                <input type="text" name="txt_actividad" id="txt_actividad" class="form-control" value="{{ registro.actividad.nombre }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_fecha_realizacion" class="form-label"><b>Fecha de Realización:</b></label>
+                <input type="text" name="txt_fecha_realizacion" id="txt_fecha_realizacion" class="form-control" value="{{ registro.fecha_realizacion }}" disabled>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_resultado" class="form-label"><b>Resultado:</b></label>
+                <textarea name="txt_resultado" id="txt_resultado" class="form-control" rows="3">{{ registro.resultado }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_puntuacion" class="form-label"><b>Puntuación:</b></label>
+                <input type="number" name="txt_puntuacion" id="txt_puntuacion" class="form-control" value="{{ registro.puntuacion }}" step="0.01" min="0" max="10">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_observaciones" class="form-label"><b>Observaciones:</b></label>
+                <textarea name="txt_observaciones" id="txt_observaciones" class="form-control" rows="3">{{ registro.observaciones }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning me-2">Guardar Cambios</button>
+                <a href="/listadoRegistrosActividad/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_editar_registro").validate({
+            rules: {
+                "txt_resultado": {
+                    required: false,
+                    minlength: 5,
+                    maxlength: 500
+                },
+                "txt_puntuacion": {
+                    required: false,
+                    number: true,
+                    min: 0,
+                    max: 100
+                },
+                "txt_observaciones": {
+                    required: false,
+                    minlength: 5,
+                    maxlength: 500
+                }
+            },
+            messages: {
+                "txt_resultado": {
+                    minlength: "El resultado debe tener al menos 5 caracteres.",
+                    maxlength: "El resultado puede tener hasta 500 caracteres."
+                },
+                "txt_puntuacion": {
+                    number: "La puntuación debe ser un número.",
+                    min: "La puntuación debe ser mayor o igual a 0.",
+                    max: "La puntuación debe ser menor o igual a 10."
+                },
+                "txt_observaciones": {
+                    minlength: "Las observaciones deben tener al menos 5 caracteres.",
+                    maxlength: "Las observaciones pueden tener hasta 500 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

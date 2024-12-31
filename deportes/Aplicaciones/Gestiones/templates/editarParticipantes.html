@@ -1,0 +1,127 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Editar Participante</h3>
+        <form action="/procesarEdicionParticipantes/" id="frm_editar_participante" method="post">
+            {% csrf_token %}
+            
+            <!-- Campo oculto para el ID del participante -->
+            <input type="hidden" name="id_participante" value="{{ participante.id }}">
+            
+            <div class="mb-3">
+                <label for="txt_nombre" class="form-label"><b>Nombre:</b></label>
+                <input type="text" name="txt_nombre" id="txt_nombre" class="form-control" value="{{ participante.nombre }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_apellido" class="form-label"><b>Apellido:</b></label>
+                <input type="text" name="txt_apellido" id="txt_apellido" class="form-control" value="{{ participante.apellido }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_fecha_nacimiento" class="form-label"><b>Fecha de Nacimiento:</b></label>
+                <input type="date" name="txt_fecha_nacimiento" id="txt_fecha_nacimiento" class="form-control" value="{{ participante.fecha_nacimiento | date:'Y-m-d' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_telefono" class="form-label"><b>Teléfono:</b></label>
+                <input type="text" name="txt_telefono" id="txt_telefono" class="form-control" value="{{ participante.telefono }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_email" class="form-label"><b>Email:</b></label>
+                <input type="email" name="txt_email" id="txt_email" class="form-control" value="{{ participante.email }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_direccion" class="form-label"><b>Dirección:</b></label>
+                <textarea name="txt_direccion" id="txt_direccion" class="form-control" rows="3">{{ participante.direccion }}</textarea>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning me-2">Guardar Cambios</button>
+                <a href="/listadoParticipantes/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_editar_participante").validate({
+            rules: {
+                "txt_nombre": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100
+                },
+                "txt_apellido": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100
+                },
+                "txt_fecha_nacimiento": {
+                    required: false
+                },
+                "txt_telefono": {
+                    required: false,
+                    minlength: 10,
+                    maxlength: 15
+                },
+                "txt_email": {
+                    required: true,
+                    email: true
+                },
+                "txt_direccion": {
+                    required: false,
+                    minlength: 5,
+                    maxlength: 300
+                }
+            },
+            messages: {
+                "txt_nombre": {
+                    required: "El nombre es obligatorio.",
+                    minlength: "El nombre debe tener al menos 3 caracteres."
+                },
+                "txt_apellido": {
+                    required: "El apellido es obligatorio.",
+                    minlength: "El apellido debe tener al menos 3 caracteres."
+                },
+                "txt_fecha_nacimiento": {
+                    required: "La fecha de nacimiento es obligatoria."
+                },
+                "txt_telefono": {
+                    minlength: "El teléfono debe tener al menos 10 caracteres.",
+                    maxlength: "El teléfono puede tener como máximo 15 caracteres."
+                },
+                "txt_email": {
+                    required: "El correo electrónico es obligatorio.",
+                    email: "Por favor, ingrese un correo electrónico válido."
+                },
+                "txt_direccion": {
+                    minlength: "La dirección debe tener al menos 5 caracteres.",
+                    maxlength: "La dirección puede tener hasta 300 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

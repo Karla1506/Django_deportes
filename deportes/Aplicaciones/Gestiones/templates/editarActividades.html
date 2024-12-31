@@ -1,0 +1,121 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Editar Actividad</h3>
+        <form action="/procesarEdicionActividad/" id="frm_editar_actividad" method="post">
+            {% csrf_token %}
+            
+            <!-- Campo oculto para el ID de la actividad -->
+            <input type="hidden" name="id_actividad" value="{{ actividad.id }}">
+            
+            <div class="mb-3">
+                <label for="txt_nombre" class="form-label"><b>Nombre:</b></label>
+                <input type="text" name="txt_nombre" id="txt_nombre" class="form-control" value="{{ actividad.nombre }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_descripcion" class="form-label"><b>Descripción:</b></label>
+                <textarea name="txt_descripcion" id="txt_descripcion" class="form-control" rows="3" required>{{ actividad.descripcion }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_duracion" class="form-label"><b>Duración:</b></label>
+                <input type="text" name="txt_duracion" id="txt_duracion" class="form-control" value="{{ actividad.duracion }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_nivel_dificultad" class="form-label"><b>Nivel de Dificultad:</b></label>
+                <select name="txt_nivel_dificultad" id="txt_nivel_dificultad" class="form-control" required>
+                    <option value="Facil" {% if actividad.nivel_dificultad == 'Facil' %}selected{% endif %}>Fácil</option>
+                    <option value="Intermedio" {% if actividad.nivel_dificultad == 'Intermedio' %}selected{% endif %}>Intermedio</option>
+                    <option value="Avanzado" {% if actividad.nivel_dificultad == 'Avanzado' %}selected{% endif %}>Avanzado</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_equipo_necesario" class="form-label"><b>Equipo Necesario:</b></label>
+                <textarea name="txt_equipo_necesario" id="txt_equipo_necesario" class="form-control" rows="3">{{ actividad.equipo_necesario }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_evento" class="form-label"><b>Evento:</b></label>
+                <input type="text" name="txt_evento" id="txt_evento" class="form-control" value="{{ actividad.evento.nombre }}" disabled>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning me-2">Guardar Cambios</button>
+                <a href="/listadoActividades/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_editar_actividad").validate({
+            rules: {
+                "txt_nombre": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 200
+                },
+                "txt_descripcion": {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 500
+                },
+                "txt_duracion": {
+                    required: true,
+                    minlength: 3
+                },
+                "txt_nivel_dificultad": {
+                    required: true
+                },
+                "txt_equipo_necesario": {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 300
+                }
+            },
+            messages: {
+                "txt_nombre": {
+                    required: "El nombre de la actividad es obligatorio.",
+                    minlength: "El nombre debe tener al menos 3 caracteres."
+                },
+                "txt_descripcion": {
+                    required: "La descripción es obligatoria.",
+                    minlength: "La descripción debe tener al menos 5 caracteres."
+                },
+                "txt_duracion": {
+                    required: "La duración es obligatoria."
+                },
+                "txt_nivel_dificultad": {
+                    required: "El nivel de dificultad es obligatorio."
+                },
+                "txt_equipo_necesario": {
+                    required: "El equipo necesario es obligatorio.",
+                    minlength: "El equipo necesario debe tener al menos 5 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

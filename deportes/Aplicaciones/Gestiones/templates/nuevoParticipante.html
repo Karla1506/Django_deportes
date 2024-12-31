@@ -1,0 +1,130 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <!-- Añadimos clases de Bootstrap para centrar y darle borde al formulario -->
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Agregar Nuevo Participante</h3>
+        <form action="/guardarParticipante/" id="frm_nuevo_participante" method="post">
+            {% csrf_token %}
+
+            <!-- Campo Nombre -->
+            <div class="mb-3">
+                <label for="txt_nombre" class="form-label"><b>NOMBRE:</b></label>
+                <input type="text" name="nombre" id="txt_nombre" class="form-control" required>
+            </div>
+
+            <!-- Campo Apellido -->
+            <div class="mb-3">
+                <label for="txt_apellido" class="form-label"><b>APELLIDO:</b></label>
+                <input type="text" name="apellido" id="txt_apellido" class="form-control" required>
+            </div>
+
+            <!-- Campo Fecha de Nacimiento -->
+            <div class="mb-3">
+                <label for="txt_fecha_nacimiento" class="form-label"><b>FECHA DE NACIMIENTO:</b></label>
+                <input type="date" name="fecha_nacimiento" id="txt_fecha_nacimiento" class="form-control">
+            </div>
+
+            <!-- Campo Teléfono -->
+            <div class="mb-3">
+                <label for="txt_telefono" class="form-label"><b>TELEFONO:</b></label>
+                <input type="tel" name="telefono" id="txt_telefono" class="form-control">
+            </div>
+
+            <!-- Campo Email -->
+            <div class="mb-3">
+                <label for="txt_email" class="form-label"><b>EMAIL:</b></label>
+                <input type="email" name="email" id="txt_email" class="form-control" required>
+            </div>
+
+            <!-- Campo Dirección -->
+            <div class="mb-3">
+                <label for="txt_direccion" class="form-label"><b>DIRECCIÓN:</b></label>
+                <textarea name="direccion" id="txt_direccion" class="form-control" rows="3"></textarea>
+            </div>
+
+            <!-- Botones -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary me-2">Guardar</button>
+                <a href="/listadoParticipantes/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_nuevo_participante").validate({
+            rules: {
+                "nombre": {
+                    required: true,
+                    letras: true,  
+                    minlength: 2,  
+                    maxlength: 100
+                },
+                "apellido": {
+                    required: true,
+                    letras: true,  
+                    minlength: 2,  
+                    maxlength: 100
+                },
+                "telefono": {
+                    required: false,
+                    minlength: 10, 
+                    maxlength: 15  
+                },
+                "email": {
+                    required: true,
+                    email: true
+                },
+                "direccion": {
+                    required: false,
+                    minlength: 10, 
+                    maxlength: 300  
+                }
+            },
+            messages: {
+                "nombre": {
+                    required: "El nombre es obligatorio.",
+                    letras: "El nombre solo debe contener letras.",
+                    minlength: "El nombre debe tener al menos 2 caracteres."
+                },
+                "apellido": {
+                    required: "El apellido es obligatorio.",
+                    letras: "El apellido solo debe contener letras.",
+                    minlength: "El apellido debe tener al menos 2 caracteres."
+                },
+                "telefono": {
+                    minlength: "El teléfono debe tener al menos 10 caracteres.",
+                    maxlength: "El teléfono puede tener como máximo 15 caracteres."
+                },
+                "email": {
+                    required: "El email es obligatorio.",
+                    email: "El formato del email no es válido."
+                },
+                "direccion": {
+                    minlength: "La dirección debe tener al menos 10 caracteres.",
+                    maxlength: "La dirección puede tener hasta 300 caracteres."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;          
+        font-size: 14px;      
+        font-weight: bold;    
+        margin-top: 5px;     
+    }
+
+    input.error, 
+    textarea.error, 
+    select.error {
+        border: 2px solid red; 
+    }
+</style>
+
+{% endblock %}

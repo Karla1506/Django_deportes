@@ -1,0 +1,138 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <div class="border p-4 rounded-3 shadow-lg">
+        <h3 class="mb-4 text-center">Editar Evento</h3>
+        <form action="/procesarEdicionEvento/" id="frm_editar_evento" method="post">
+            {% csrf_token %}
+            
+            <!-- Campo oculto para el ID del evento -->
+            <input type="hidden" name="id_evento" value="{{ evento.id }}">
+            
+            <div class="mb-3">
+                <label for="txt_nombre" class="form-label"><b>Nombre del Evento:</b></label>
+                <input type="text" name="txt_nombre" id="txt_nombre" class="form-control" value="{{ evento.nombre }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_descripcion" class="form-label"><b>Descripción:</b></label>
+                <textarea name="txt_descripcion" id="txt_descripcion" class="form-control" rows="3">{{ evento.descripcion }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_fecha_inicio" class="form-label"><b>Fecha de Inicio:</b></label>
+                <input type="date" name="txt_fecha_inicio" id="txt_fecha_inicio" class="form-control" value="{{ evento.fecha_inicio | date:'Y-m-d' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_fecha_fin" class="form-label"><b>Fecha de Fin:</b></label>
+                <input type="date" name="txt_fecha_fin" id="txt_fecha_fin" class="form-control" value="{{ evento.fecha_fin | date:'Y-m-d' }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_ubicacion" class="form-label"><b>Ubicación:</b></label>
+                <input type="text" name="txt_ubicacion" id="txt_ubicacion" class="form-control" value="{{ evento.ubicacion }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_organizador" class="form-label"><b>Organizador:</b></label>
+                <input type="text" name="txt_organizador" id="txt_organizador" class="form-control" value="{{ evento.organizador }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="txt_cupo_maximo" class="form-label"><b>Cupo Máximo:</b></label>
+                <input type="number" name="txt_cupo_maximo" id="txt_cupo_maximo" class="form-control" value="{{ evento.cupo_maximo }}" min="0">
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-warning me-2">Guardar Cambios</button>
+                <a href="/listadoEventos/" class="btn btn-danger">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#frm_editar_evento").validate({
+            rules: {
+                "txt_nombre": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 200
+                },
+                "txt_descripcion": {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 1000
+                },
+                "txt_fecha_inicio": {
+                    required: true
+                },
+                "txt_fecha_fin": {
+                    required: true
+                },
+                "txt_ubicacion": {
+                    required: true,
+                    minlength: 5,
+                    maxlength: 200
+                },
+                "txt_organizador": {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 100
+                },
+                "txt_cupo_maximo": {
+                    required: true,
+                    min: 0
+                }
+            },
+            messages: {
+                "txt_nombre": {
+                    required: "El nombre del evento es obligatorio.",
+                    minlength: "El nombre del evento debe tener al menos 3 caracteres."
+                },
+                "txt_descripcion": {
+                    required: "La descripción es obligatoria.",
+                    minlength: "La descripción debe tener al menos 5 caracteres."
+                },
+                "txt_fecha_inicio": {
+                    required: "La fecha de inicio es obligatoria."
+                },
+                "txt_fecha_fin": {
+                    required: "La fecha de fin es obligatoria."
+                },
+                "txt_ubicacion": {
+                    required: "La ubicación es obligatoria.",
+                    minlength: "La ubicación debe tener al menos 5 caracteres."
+                },
+                "txt_organizador": {
+                    required: "El organizador es obligatorio.",
+                    minlength: "El organizador debe tener al menos 3 caracteres."
+                },
+                "txt_cupo_maximo": {
+                    required: "El cupo máximo es obligatorio.",
+                    min: "El cupo máximo debe ser al menos 0."
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    label.error {
+        color: red;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    input.error,
+    textarea.error,
+    select.error {
+        border: 2px solid red;
+    }
+</style>
+
+{% endblock %}

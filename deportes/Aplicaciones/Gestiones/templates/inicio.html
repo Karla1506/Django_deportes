@@ -1,0 +1,95 @@
+{% extends "./plantilla.html" %}
+
+{% block contenido %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Incluye Bootstrap desde un CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Estilo para el fondo de pantalla que cambiará */
+        .background-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1s ease-in-out;
+        }
+        
+        /* Contenido sobre el fondo */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Fondo oscuro semitransparente */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content {
+            text-align: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor del fondo de pantalla dinámico -->
+    <div id="background-container" class="background-container">
+        <div class="overlay">
+            <div class="content">
+            </div>
+        </div>
+    </div>
+
+    <!-- Incluye Bootstrap JS desde un CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Array con las imágenes de fondo relacionadas con las especialidades dentales
+        const backgrounds = [
+            'https://www.cvu.com.co/documents/36676/36695/shutterstock_90869015-min.jpg/faa4d36e-3c1b-ad5e-876f-16d37bb65c2e?version=1.0&t=1616794103170', 
+            'https://lh6.googleusercontent.com/proxy/V7byQXpXRBdiweTjwqg7Lhj2gy2yow4qtVQX1Qwr1hTzjnFA59svjPA5NfCUwown5dTuvMofvh1-MywxmJ9xj5hTBoP1Uw0DSRx-66_j5C7zhsY3ZTMChbFydqm55tresXU',       
+            'https://blog.jeep.com.ec/hubfs/7%20deportes%20extremos%20para%20realizar%20outdoor%20despu%C3%A9s%20de%20la%20cuarentena-4.png',          
+            'https://media.istockphoto.com/id/527531592/es/foto/rock-climber-aferrando-al-un-acantilado.jpg?s=612x612&w=0&k=20&c=83QOhxyraKUbxtv2tTX7_qzy4Ug2re_r0ItNL8HEMHI=',     
+            'https://tourscanner.com/blog/wp-content/uploads/2020/04/downhill-mountain-biking.jpg'           
+        ];
+
+        let currentIndex = 0;
+
+        // Función para precargar las imágenes de fondo
+        function preloadImages() {
+            for (let i = 0; i < backgrounds.length; i++) {
+                const img = new Image();
+                img.src = backgrounds[i];
+            }
+        }
+
+        // Función para cambiar el fondo cada 5 segundos
+        function changeBackground() {
+            currentIndex = (currentIndex + 1) % backgrounds.length;
+            document.getElementById('background-container').style.backgroundImage = `url(${backgrounds[currentIndex]})`;
+        }
+
+        // Llamar a la función de precarga de imágenes
+        preloadImages();
+
+        // Establecer la primera imagen de fondo inmediatamente
+        document.getElementById('background-container').style.backgroundImage = `url(${backgrounds[currentIndex]})`;
+
+        // Cambiar el fondo cada 5 segundos
+        setInterval(changeBackground, 5000);
+    </script>
+</body>
+</html>
+{% endblock %}
